@@ -12,6 +12,11 @@ import java.util.List;
  */
 public interface ProductCategoryDao extends JpaRepository<ProductCategory,Integer> {
 
+    /**
+     * 通过专区类型找专区
+     * @param catagoryIds
+     * @return
+     */
     List<ProductCategory> findByCategoryTypeIn(List<Integer> catagoryIds);
 
 }
