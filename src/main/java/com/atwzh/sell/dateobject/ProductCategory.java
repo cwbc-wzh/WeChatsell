@@ -1,49 +1,38 @@
 package com.atwzh.sell.dateobject;
 
+import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
+
 /**
  * @author wangzihang
  * @createTime 2019/5/9
  * @description product_category表实体
  */
+@Entity
+@DynamicUpdate
+@Data
 public class ProductCategory {
 
     /** 主键 */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     /** 栏目名称 */
     private String categoryName;
     /** 栏目编号 */
     private Integer categoryType;
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public ProductCategory() {
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
+    public ProductCategory(String categoryName, Integer categoryType) {
         this.categoryName = categoryName;
-    }
-
-    public Integer getCategoryType() {
-        return categoryType;
-    }
-
-    public void setCategoryType(Integer categoryType) {
         this.categoryType = categoryType;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductCategory{" +
-                "categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", categoryType=" + categoryType +
-                '}';
     }
 }
