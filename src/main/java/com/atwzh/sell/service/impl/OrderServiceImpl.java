@@ -1,12 +1,16 @@
 package com.atwzh.sell.service.impl;
 
-import com.atwzh.exception.SellException;
+import com.atwzh.sell.converter.OrderMaster2OrderDTOConverter;
+import com.atwzh.sell.exception.SellException;
 import com.atwzh.sell.dao.OrderDetailDao;
 import com.atwzh.sell.dao.OrderMasterDao;
 import com.atwzh.sell.dateobject.OrderDetail;
 import com.atwzh.sell.dateobject.OrderMaster;
 import com.atwzh.sell.dateobject.ProductInfo;
+import com.atwzh.sell.dto.CartDTO;
 import com.atwzh.sell.dto.OrderDto;
+import com.atwzh.sell.enums.OrderStatusEnum;
+import com.atwzh.sell.enums.PayStatusEnum;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.service.OrderService;
 import com.atwzh.sell.service.ProductInfoService;
@@ -14,15 +18,21 @@ import com.atwzh.sell.utils.KeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author wangzihang
  * @createTime 2019/6/26
  * @description
  */
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -39,11 +49,14 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDto
      */
     @Override
+    @Transactional
     public OrderDto create(OrderDto orderDto) {
 
         String orderId = KeyUtil.generalKey();
         //订单总价
         BigDecimal orderAccount = new BigDecimal(0);
+
+        List<CartDTO> cartDTOList = new ArrayList<>();
 
         //1.查询商品(数量，价格)
         for(OrderDetail orderDetail : orderDto.getOrderDetails()) {
@@ -56,22 +69,28 @@ public class OrderServiceImpl implements OrderService {
                     .multiply(new BigDecimal(orderDetail.getProductQuantity()))
                     .add(orderAccount);
 
+            BeanUtils.copyProperties(one, orderDetail);
             orderDetail.setOrderId(orderId);
             orderDetail.setDetailId(KeyUtil.generalKey());
-            BeanUtils.copyProperties(one, orderDetail);
             orderDetailDao.save(orderDetail);
+
+            CartDTO cartDTO = new CartDTO(orderDetail.getProductId(), orderDetail.getProductQuantity());
+            cartDTOList.add(cartDTO);
         }
-        OrderMaster orderMaster = new OrderMaster();
-        orderMaster.setOrderAmount(orderAccount);
-        orderMaster.setOrderId(orderId);
-        BeanUtils.copyProperties(orderDto, orderMaster);
-        orderMasterDao.save(orderMaster);
 
         //3.写入数据库(order_master, order_detail)
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto, orderMaster);
+        orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
+        orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
+        orderMaster.setOrderAmount(orderAccount);
+        orderMaster.setOrderId(orderId);
+        orderMasterDao.save(orderMaster);
 
         //4.扣除库存
+        productInfoService.decreaseStock(cartDTOList);
 
-        return null;
+        return orderDto;
     }
 
     /**
@@ -81,7 +100,23 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto findOne(String orderId) {
-        return null;
+
+        OrderMaster orderMaster = orderMasterDao.getOne(orderId);
+
+        if(orderMaster == null) {
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
+
+        List<OrderDetail> orderDetails = orderDetailDao.findByOrderId(orderId);
+
+        if(orderDetails == null) {
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
+
+        OrderDto orderDto = new OrderDto();
+        BeanUtils.copyProperties(orderMaster, orderDto);
+        orderDto.setOrderDetails(orderDetails);
+        return orderDto;
     }
 
     /**
@@ -92,7 +127,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
-        return null;
+
+        Page<OrderMaster> orderMasters = orderMasterDao.findByBuyerOpenid(buyerOpenid, pageable);
+        List<OrderDto> orderDtoList = OrderMaster2OrderDTOConverter.convert(orderMasters.getContent());
+        Page<OrderDto> orderDtoPage = new PageImpl<OrderDto>(orderDtoList, pageable, orderMasters.getTotalElements());
+
+        return orderDtoPage;
     }
 
     /**
@@ -102,6 +142,25 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto cancle(OrderDto orderDto) {
+
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto, orderMaster);
+
+        //判断订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+            throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
+        }
+        //修改订单状态
+        orderMaster.setOrderStatus(OrderStatusEnum.CANCLE.getCode());
+        OrderMaster updateResult = orderMasterDao.save(orderMaster);
+        if(updateResult == null) {
+            throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
+        }
+
+        //返回库存 TODO 待明天编写 6-8 7:20
+
+        //如果已支付，需要退款
+
         return null;
     }
 

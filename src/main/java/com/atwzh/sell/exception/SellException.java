@@ -1,4 +1,4 @@
-package com.atwzh.exception;
+package com.atwzh.sell.exception;
 
 import com.atwzh.sell.enums.ResultEnum;
 

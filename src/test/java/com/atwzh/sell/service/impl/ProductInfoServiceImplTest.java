@@ -1,6 +1,7 @@
 package com.atwzh.sell.service.impl;
 
 import com.atwzh.sell.dateobject.ProductInfo;
+import com.atwzh.sell.dto.CartDTO;
 import com.atwzh.sell.enums.ProductStatusEnum;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -70,5 +72,14 @@ public class ProductInfoServiceImplTest {
     public void findUpAll() {
         List<ProductInfo> upAll = productInfoService.findUpAll();
         Assert.assertEquals(ProductStatusEnum.UP.getStatus(), upAll.get(0).getProductStatus());
+    }
+
+    @Test
+    public void decreaseStockTest() {
+        List<CartDTO> cartDTOList = new ArrayList<>();
+        CartDTO cartDTO = new CartDTO("12345", 2);
+        cartDTOList.add(cartDTO);
+
+        productInfoService.decreaseStock(cartDTOList);
     }
 }
