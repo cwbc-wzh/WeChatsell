@@ -37,5 +37,5 @@ public class ProductInfo {
     private Integer productStatus;
 
     /** 类目编号 */
-    private String categoryType;
+    private Integer categoryType;
 }

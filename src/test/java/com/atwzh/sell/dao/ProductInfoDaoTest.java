@@ -28,7 +28,7 @@ public class ProductInfoDaoTest {
     public void TestSave() {
         ProductInfo productInfo = new ProductInfo();
         productInfo.setProductId("234567");
-        productInfo.setCategoryType("2");
+        productInfo.setCategoryType(2);
         productInfo.setProductDescription("物美价廉");
         productInfo.setProductIcon("C:/2.jpg");
         productInfo.setProductName("鱼香肉丝");

@@ -52,7 +52,7 @@ public class ProductInfoServiceImplTest {
         productInfo.setProductPrice(new BigDecimal(1000.0));
         productInfo.setProductName("燕窝");
         productInfo.setProductIcon("http://2.jpg");
-        productInfo.setCategoryType("1");
+        productInfo.setCategoryType(1);
         productInfo.setProductDescription("真贵呀");
         ProductInfo save = productInfoService.save(productInfo);
         Assert.assertNotNull(save);
