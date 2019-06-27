@@ -181,7 +181,18 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto finish(OrderDto orderDto) {
-        return null;
+        //判断订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+            throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
+        }
+
+        //修改订单状态
+        orderDto.setOrderStatus(OrderStatusEnum.FINISH.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto, orderMaster);
+        OrderMaster result = orderMasterDao.save(orderMaster);
+
+        return orderDto;
     }
 
     /**
@@ -191,6 +202,21 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto paid(OrderDto orderDto) {
-        return null;
+        //判断订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
+            throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
+        }
+
+        //判断支付状态
+        if(!orderDto.getPayStatus().equals(PayStatusEnum.WAIT.getCode())) {
+            throw new SellException(ResultEnum.PAY_STATUS_ERROR);
+        }
+        //修改支付状态
+        orderDto.setPayStatus(PayStatusEnum.SUCCESS.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto,orderMaster);
+        OrderMaster result = orderMasterDao.save(orderMaster);
+
+        return orderDto;
     }
 }

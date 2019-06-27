@@ -4,6 +4,7 @@ import com.atwzh.sell.dateobject.OrderDetail;
 import com.atwzh.sell.dateobject.OrderMaster;
 import com.atwzh.sell.dto.OrderDto;
 import com.atwzh.sell.enums.OrderStatusEnum;
+import com.atwzh.sell.enums.PayStatusEnum;
 import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -82,9 +83,23 @@ public class OrderServiceImplTest {
 
     @Test
     public void finish() {
+
+        OrderDto orderDto = orderService.findOne("1561597910713209112");
+
+        OrderDto orderDto1 = orderService.finish(orderDto);
+
+        Assert.assertEquals(OrderStatusEnum.FINISH.getCode(), orderDto1.getOrderStatus());
+
     }
 
     @Test
     public void paid() {
+
+        OrderDto orderDto = orderService.findOne("1561597910713209112");
+
+        OrderDto orderDto1 = orderService.paid(orderDto);
+
+        Assert.assertEquals(PayStatusEnum.SUCCESS.getCode(), orderDto1.getPayStatus());
+
     }
 }
