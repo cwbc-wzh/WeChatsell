@@ -11,5 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @description 订单主表Dao
  */
 public interface OrderMasterDao extends JpaRepository<OrderMaster, String> {
+
+    OrderMaster findByOrderId(String orderId);
+
     Page<OrderMaster> findByBuyerOpenid(String buyerOpenId, Pageable pageable);
 }

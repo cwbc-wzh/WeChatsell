@@ -1,5 +1,6 @@
 package com.atwzh.sell.service.impl;
 
+import com.atwzh.sell.converter.OrderDetail2CartDTO;
 import com.atwzh.sell.converter.OrderMaster2OrderDTOConverter;
 import com.atwzh.sell.exception.SellException;
 import com.atwzh.sell.dao.OrderDetailDao;
@@ -22,9 +23,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -101,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto findOne(String orderId) {
 
-        OrderMaster orderMaster = orderMasterDao.getOne(orderId);
+        OrderMaster orderMaster = orderMasterDao.findByOrderId(orderId);
 
         if(orderMaster == null) {
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
@@ -144,24 +147,31 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto cancle(OrderDto orderDto) {
 
         OrderMaster orderMaster = new OrderMaster();
-        BeanUtils.copyProperties(orderDto, orderMaster);
 
         //判断订单状态
         if(!orderDto.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())) {
             throw new SellException(ResultEnum.ORDER_STATUS_ERROR);
         }
         //修改订单状态
-        orderMaster.setOrderStatus(OrderStatusEnum.CANCLE.getCode());
+        orderDto.setOrderStatus(OrderStatusEnum.CANCLE.getCode());
+        BeanUtils.copyProperties(orderDto, orderMaster);
         OrderMaster updateResult = orderMasterDao.save(orderMaster);
         if(updateResult == null) {
             throw new SellException(ResultEnum.ORDER_UPDATE_FAIL);
         }
 
-        //返回库存 TODO 待明天编写 6-8 7:20
-
+        //返回库存
+        List<OrderDetail> orderDetailList = orderDto.getOrderDetails();
+        if(CollectionUtils.isEmpty(orderDetailList)) {
+            throw new SellException(ResultEnum.ORDER_DETAIL_IS_NULL);
+        }
+        List<CartDTO> cartDTOList = OrderDetail2CartDTO.convert(orderDetailList);
+        productInfoService.increaseStock(cartDTOList);
         //如果已支付，需要退款
-
-        return null;
+        if(orderDto.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())) {
+            //TODO 暂未写支付相关
+        }
+        return orderDto;
     }
 
     /**

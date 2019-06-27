@@ -47,4 +47,10 @@ public class OrderMasterDaoTest {
         Assert.assertEquals(3,restlt.getTotalElements());
 
     }
+
+    @Test
+    public void findOneTest() {
+        OrderMaster one = orderMasterDao.findByOrderId("1561597910713209112");
+        Assert.assertEquals("1561597910713209112", one.getOrderId());
+    }
 }

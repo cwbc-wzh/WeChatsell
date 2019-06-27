@@ -30,7 +30,7 @@ public class OrderDetailDaoTest {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId("12345");
         orderDetail.setDetailId("123457");
-        orderDetail.setProdcutIcon("http://1.jpg");
+        orderDetail.setProductIcon("http://1.jpg");
         orderDetail.setProductId("234567");
         orderDetail.setProductName("鱼香肉丝");
         orderDetail.setProductPrice(new BigDecimal(5.5));
@@ -42,7 +42,7 @@ public class OrderDetailDaoTest {
     @Test
     public void findByOrderId() {
 
-        List<OrderDetail> byOrderId = orderDetailDao.findByOrderId("12345");
+        List<OrderDetail> byOrderId = orderDetailDao.findByOrderId("1561597910713209112");
         Assert.assertNotNull(byOrderId);
     }
 }

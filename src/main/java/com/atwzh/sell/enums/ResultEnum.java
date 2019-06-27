@@ -16,6 +16,7 @@ public enum ResultEnum {
     ORDERDETAIL_NOT_EXIST(13, "订单详情不存在"),
     ORDER_STATUS_ERROR(14, "订单状态错误"),
     ORDER_UPDATE_FAIL(15,"订单更新错误"),
+    ORDER_DETAIL_IS_NULL(16, "订单详情为空"),
     ;
 
 

@@ -49,7 +49,7 @@ create table `order_detail`(
   `product_name` varchar(64) not null comment '商品名称',
   `product_price` decimal(8,2) not null comment '商品价格',
   `product_quantity` int not null comment '商品数量',
-  `prodcut_icon` varchar(512) comment '商品小图',
+  `product_icon` varchar(512) comment '商品小图',
   `create_time` timestamp not null default current_timestamp comment '创建时间',
   `update_time` timestamp not null default current_timestamp on update current_timestamp comment '更新时间',
   primary key (`detail_id`),

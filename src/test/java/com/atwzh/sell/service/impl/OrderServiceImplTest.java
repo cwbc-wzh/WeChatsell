@@ -3,6 +3,7 @@ package com.atwzh.sell.service.impl;
 import com.atwzh.sell.dateobject.OrderDetail;
 import com.atwzh.sell.dateobject.OrderMaster;
 import com.atwzh.sell.dto.OrderDto;
+import com.atwzh.sell.enums.OrderStatusEnum;
 import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -26,8 +27,8 @@ public class OrderServiceImplTest {
     @Autowired
     private OrderServiceImpl orderService;
 
-    private String BUYER_OPENID = "111220";
-//    TODO 待执行
+    private final String BUYER_OPENID = "111220";
+    private final String PRODUCT_ID = "234567";
     @Test
     public void create() {
         OrderDto orderDto = new OrderDto();
@@ -39,7 +40,7 @@ public class OrderServiceImplTest {
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setProductId("12345");
+        orderDetail.setProductId(PRODUCT_ID);
         orderDetail.setProductQuantity(3);
         orderDetails.add(orderDetail);
 
@@ -53,7 +54,7 @@ public class OrderServiceImplTest {
     @Test
     public void findOne() {
 
-        OrderDto orderDto = orderService.findOne("1234566");
+        OrderDto orderDto = orderService.findOne("1561597910713209112");
 
         Assert.assertNotNull(orderDto);
     }
@@ -71,6 +72,12 @@ public class OrderServiceImplTest {
 
     @Test
     public void cancle() {
+
+        OrderDto orderDto = orderService.findOne("1561597910713209112");
+
+        OrderDto orderDto1 = orderService.cancle(orderDto);
+
+        Assert.assertEquals(OrderStatusEnum.CANCLE.getCode(), orderDto1.getOrderStatus());
     }
 
     @Test

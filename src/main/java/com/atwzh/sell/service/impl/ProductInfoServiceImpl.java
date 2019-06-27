@@ -57,8 +57,20 @@ public class ProductInfoServiceImpl implements ProductInfoService {
      * @param cartDTOList
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void increaseStock(List<CartDTO> cartDTOList) {
+        for(CartDTO cartDTO : cartDTOList) {
+            ProductInfo productInfo = productInfoDao.findByProductId(cartDTO.getProductId());
 
+            if(productInfo == null) {
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIT);
+            }
+            Integer result = productInfo.getProductStock() + cartDTO.getProductQuantity();
+
+            productInfo.setProductStock(result);
+
+            productInfoDao.save(productInfo);
+        }
     }
 
     /**
@@ -67,10 +79,10 @@ public class ProductInfoServiceImpl implements ProductInfoService {
      * @param cartDTOList
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void decreaseStock(List<CartDTO> cartDTOList) {
         for(CartDTO cartDTO : cartDTOList) {
-            ProductInfo productInfo = productInfoDao.getOne(cartDTO.getProductId());
+            ProductInfo productInfo = productInfoDao.findByProductId(cartDTO.getProductId());
 
             if(productInfo == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIT);
