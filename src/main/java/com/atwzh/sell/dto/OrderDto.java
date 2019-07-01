@@ -1,6 +1,9 @@
 package com.atwzh.sell.dto;
 
 import com.atwzh.sell.dateobject.OrderDetail;
+import com.atwzh.sell.utils.serializer.Date2LongSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,6 +16,7 @@ import java.util.List;
  * @description order
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDto {
 
     /** 订单id */
@@ -32,8 +36,10 @@ public class OrderDto {
     /** 支付状态 */
     private Integer payStatus;
     /** 创建时间 */
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date createTime;
     /** 更新时间 */
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
 
     private List<OrderDetail> orderDetails;
