@@ -6,6 +6,7 @@ import com.atwzh.sell.dto.OrderDto;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.exception.SellException;
 import com.atwzh.sell.form.OrderForm;
+import com.atwzh.sell.service.BuyerService;
 import com.atwzh.sell.service.OrderService;
 import com.atwzh.sell.utils.ResultVOUtil;
 import com.atwzh.sell.vo.ResultVO;
@@ -33,6 +34,9 @@ public class BuyerOrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    BuyerService buyerService;
 
     /**
      * 创建订单
@@ -84,10 +88,9 @@ public class BuyerOrderController {
     public ResultVO<OrderDetail> detail(@RequestParam("openid") String openid,
                                         @RequestParam("orderId") String orderId) {
 
-        //TODO 不安全，改进
-        OrderDto result = orderService.findOne(orderId);
+        OrderDto orderOne = buyerService.findOrderOne(openid, orderId);
 
-        return ResultVOUtil.success(result);
+        return ResultVOUtil.success(orderOne);
     }
 
     /**
@@ -97,9 +100,7 @@ public class BuyerOrderController {
     public ResultVO cancle(@RequestParam("openid") String openid,
                            @RequestParam("orderId") String orderId) {
 
-        //TODO 不安全，改进
-        OrderDto result = orderService.findOne(orderId);
-        orderService.cancle(result);
+        buyerService.cancleOrder(openid,orderId);
 
         return ResultVOUtil.success();
     }
