@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author wangzihang
@@ -22,13 +23,9 @@ public class OrderMaster2OrderDTOConverter {
 
     public static List<OrderDto> convert(List<OrderMaster> orderMasterList) {
 
-        List<OrderDto> orderDtoList = new ArrayList<>();
-        OrderDto orderDto = new OrderDto();
-        for(OrderMaster orderMaster : orderMasterList) {
-            orderDto = convert(orderMaster);
-            orderDtoList.add(orderDto);
-        }
-        return orderDtoList;
+        List<OrderDto> collect = orderMasterList.stream().map(e -> convert(e)).collect(Collectors.toList());
+
+        return collect;
     }
 
 }
