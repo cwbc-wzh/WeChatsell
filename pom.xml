@@ -48,6 +48,12 @@
             <artifactId>gson</artifactId>
             <version>2.6.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>3.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
