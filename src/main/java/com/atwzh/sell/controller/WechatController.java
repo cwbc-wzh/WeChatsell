@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @description weixin
  */
 @Controller
-@RequestMapping("wechat")
+@RequestMapping("/wechat")
 @Slf4j
 public class WechatController {
 
@@ -27,11 +27,11 @@ public class WechatController {
     @Autowired
     WxMpService wxMpService;
 
-    @RequestMapping("authorize")
+    @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
         //1.配置
         //2.调用方法
-        String url = "";
+        String url = "http://kmzcaz.natappfree.cc/sell/wechat/usersInfo";
         String result = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, returnUrl);
 
         return "redirect:" + result;
