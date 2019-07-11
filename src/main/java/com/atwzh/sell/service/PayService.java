@@ -1,6 +1,7 @@
 package com.atwzh.sell.service;
 
 import com.atwzh.sell.dto.OrderDto;
+import com.lly835.bestpay.model.PayResponse;
 
 /**
  * @author wangzihang
@@ -9,6 +10,6 @@ import com.atwzh.sell.dto.OrderDto;
  */
 public interface PayService {
 
-    void create(OrderDto orderDto);
+    PayResponse create(OrderDto orderDto);
 
 }
