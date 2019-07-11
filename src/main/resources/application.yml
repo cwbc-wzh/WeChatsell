@@ -15,3 +15,7 @@ server:
 wechat:
   mpAppId: wx339336302995faa2
   mpAppSecret: e0a139c7e3e617763810e6708b7d0d9c
+  mchId: 123
+  mchKey: kk
+  keyPath: /home
+  notifyUrl: http://127.0.0.1:8080/sell/notify
