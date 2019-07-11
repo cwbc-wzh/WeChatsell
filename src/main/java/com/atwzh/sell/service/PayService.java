@@ -12,4 +12,5 @@ public interface PayService {
 
     PayResponse create(OrderDto orderDto);
 
+    PayResponse notify(String notifyData);
 }
