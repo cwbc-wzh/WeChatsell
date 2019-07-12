@@ -6,6 +6,7 @@ import com.atwzh.sell.exception.SellException;
 import com.atwzh.sell.service.OrderService;
 import com.atwzh.sell.service.PayService;
 import com.atwzh.sell.utils.JsonUtil;
+import com.atwzh.sell.utils.MathUtil;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
@@ -13,6 +14,8 @@ import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 /**
  * @author wangzihang
@@ -59,7 +62,7 @@ public class PayServiceImpl implements PayService {
             log.error("【微信支付】 订单不存在 orderId = {}", payResponse.getOrderId());
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
-        if(!orderDto.getOrderAmount().equals(payResponse.getOrderAmount())) {
+        if(!MathUtil.equal(payResponse.getOrderAmount(), orderDto.getOrderAmount().doubleValue())) {
             log.error("【微信支付】 订单金额不一致 ");
             throw new SellException(ResultEnum.WXPAY_MONEY_NOTIFY_ERROR);
         }
