@@ -14,6 +14,7 @@ import com.atwzh.sell.enums.OrderStatusEnum;
 import com.atwzh.sell.enums.PayStatusEnum;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.service.OrderService;
+import com.atwzh.sell.service.PayService;
 import com.atwzh.sell.service.ProductInfoService;
 import com.atwzh.sell.utils.KeyUtil;
 import org.springframework.beans.BeanUtils;
@@ -44,7 +45,8 @@ public class OrderServiceImpl implements OrderService {
     OrderDetailDao orderDetailDao;
     @Autowired
     OrderMasterDao orderMasterDao;
-
+    @Autowired
+    PayService payService;
 
     /**
      * 创建订单
@@ -170,7 +172,7 @@ public class OrderServiceImpl implements OrderService {
         productInfoService.increaseStock(cartDTOList);
         //如果已支付，需要退款
         if(orderDto.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())) {
-            //TODO 暂未写支付相关
+            payService.refund(orderDto);
         }
         return orderDto;
     }

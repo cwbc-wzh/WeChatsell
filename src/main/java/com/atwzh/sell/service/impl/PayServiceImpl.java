@@ -1,6 +1,7 @@
 package com.atwzh.sell.service.impl;
 
 import com.atwzh.sell.dto.OrderDto;
+import com.atwzh.sell.enums.PayStatusEnum;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.exception.SellException;
 import com.atwzh.sell.service.OrderService;
@@ -10,6 +11,8 @@ import com.atwzh.sell.utils.MathUtil;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
+import com.lly835.bestpay.model.RefundRequest;
+import com.lly835.bestpay.model.RefundResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +73,18 @@ public class PayServiceImpl implements PayService {
         orderService.paid(orderDto);
 
         return payResponse;
+    }
+
+    @Override
+    public RefundResponse refund(OrderDto orderDto) {
+
+        RefundRequest refundRequest = new RefundRequest();
+        refundRequest.setOrderId(orderDto.getOrderId());
+        refundRequest.setOrderAmount(orderDto.getOrderAmount().doubleValue());
+        refundRequest.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
+
+        RefundResponse refund = bestPayService.refund(refundRequest);
+
+        return refund;
     }
 }
