@@ -222,4 +222,18 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDto;
     }
+
+    /**
+     * 查询订单别表
+     *
+     * @param pageable
+     */
+    @Override
+    public Page<OrderDto> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasters = orderMasterDao.findAll(pageable);
+        List<OrderDto> orderDtoList = OrderMaster2OrderDTOConverter.convert(orderMasters.getContent());
+        Page<OrderDto> orderDtoPage = new PageImpl<>(orderDtoList, pageable, orderMasters.getTotalElements());
+
+        return orderDtoPage;
+    }
 }
