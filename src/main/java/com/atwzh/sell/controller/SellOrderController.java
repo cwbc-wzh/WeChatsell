@@ -59,4 +59,36 @@ public class SellOrderController {
         return new ModelAndView("common/success",map);
     }
 
+    @RequestMapping("/detail")
+    public ModelAndView detail(@RequestParam("orderId") String orderId,
+                               Map<String, Object> map) {
+        OrderDto orderDto = null;
+        try {
+            orderDto = orderService.findOne(orderId);
+        } catch (SellException e) {
+            map.put("msg", ResultEnum.ORDER_NOT_EXIST.getMsg());
+            map.put("url", "/sell/seller/order/list");
+            return new ModelAndView("common/error", map);
+        }
+
+        map.put("orderDTO", orderDto);
+        return new ModelAndView("order/detail", map);
+    }
+    @RequestMapping("/finish")
+    public ModelAndView finish(@RequestParam("orderId") String orderId,
+                               Map<String, Object> map) {
+        OrderDto orderDto = null;
+        try {
+            orderDto = orderService.findOne(orderId);
+            orderService.finish(orderDto);
+        } catch (SellException e) {
+            map.put("msg", ResultEnum.ORDER_NOT_EXIST.getMsg());
+            map.put("url", "/sell/seller/order/list");
+            return new ModelAndView("common/error", map);
+        }
+
+        map.put("msg", ResultEnum.ORDER_FINISH_SUCCESS.getMsg());
+        map.put("url","/sell/seller/order/list");
+        return new ModelAndView("common/success", map);
+    }
 }

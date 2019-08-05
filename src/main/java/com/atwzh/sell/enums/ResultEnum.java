@@ -23,7 +23,8 @@ public enum ResultEnum {
     ORDER_OWNER_ERROR(19,"订单不属于该用户"),
     WX_MP_ERROE(20, "微信认证相关错误"),
     WXPAY_MONEY_NOTIFY_ERROR(21,"微信异步通知金额不一致"),
-    ORDER_CANCLE_SUCCESS(22,"订单取消成功")
+    ORDER_CANCLE_SUCCESS(22,"订单取消成功"),
+    ORDER_FINISH_SUCCESS(22,"订单完结成功")
     ;
 
 

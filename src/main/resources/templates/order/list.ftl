@@ -68,10 +68,10 @@
                             ${orderDTO.createTime}
                         </td>
                         <td>
-                            详情
+                            <a href="/sell/seller/order/detail?orderId=${orderDTO.orderId}">详情</a>
                         </td>
                         <td>
-                            <#if orderDTO.getOrderStatusEnum().meg != "取消">
+                            <#if orderDTO.getOrderStatusEnum().meg == "新下单">
                                 <a href="/sell/seller/order/cancle?orderId=${orderDTO.orderId}">取消</a>
                             </#if>
                         </td>
