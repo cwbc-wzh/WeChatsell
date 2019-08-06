@@ -48,7 +48,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
     @Override
     public List<ProductInfo> findUpAll() {
-        return productInfoDao.findByProductStatus(ProductStatusEnum.UP.getStatus());
+        return productInfoDao.findByProductStatus(ProductStatusEnum.UP.getCode());
     }
 
     /**
@@ -98,5 +98,33 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
             productInfoDao.save(productInfo);
         }
+    }
+
+    @Override
+    public ProductInfo onSale(String productInfoId) {
+        ProductInfo one = productInfoDao.getOne(productInfoId);
+
+        if(one == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIT);
+        }
+        if(one.getProductStatus().equals(ProductStatusEnum.UP.getCode())){
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
+        one.setProductStatus(ProductStatusEnum.UP.getCode());
+        return productInfoDao.save(one);
+    }
+
+    @Override
+    public ProductInfo offSale(String productInfoId) {
+        ProductInfo one = productInfoDao.getOne(productInfoId);
+
+        if(one == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIT);
+        }
+        if(one.getProductStatus().equals(ProductStatusEnum.DOWN.getCode())){
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
+        one.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        return productInfoDao.save(one);
     }
 }

@@ -63,15 +63,15 @@ public class ProductInfoServiceImplTest {
     @Test
     public void findByProductStatus() {
 
-        List<ProductInfo> byProductStatus = productInfoService.findByProductStatus(ProductStatusEnum.UP.getStatus());
-        Assert.assertEquals(ProductStatusEnum.UP.getStatus(), byProductStatus.get(0).getProductStatus());
+        List<ProductInfo> byProductStatus = productInfoService.findByProductStatus(ProductStatusEnum.UP.getCode());
+        Assert.assertEquals(ProductStatusEnum.UP.getCode(), byProductStatus.get(0).getProductStatus());
 
     }
 
     @Test
     public void findUpAll() {
         List<ProductInfo> upAll = productInfoService.findUpAll();
-        Assert.assertEquals(ProductStatusEnum.UP.getStatus(), upAll.get(0).getProductStatus());
+        Assert.assertEquals(ProductStatusEnum.UP.getCode(), upAll.get(0).getProductStatus());
     }
 
     @Test
@@ -81,5 +81,17 @@ public class ProductInfoServiceImplTest {
         cartDTOList.add(cartDTO);
 
         productInfoService.decreaseStock(cartDTOList);
+    }
+
+    @Test
+    public void OnSaleTest() {
+        ProductInfo productInfo = productInfoService.onSale("234567");
+        Assert.assertNotEquals(ProductStatusEnum.UP.getCode(),productInfo.getProductStatus());
+    }
+
+    @Test
+    public void OffaleTest() {
+        ProductInfo productInfo = productInfoService.offSale("234567");
+        Assert.assertNotEquals(ProductStatusEnum.DOWN.getCode(),productInfo.getProductStatus());
     }
 }
