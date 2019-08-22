@@ -1,6 +1,7 @@
 package com.atwzh.sell.service.impl;
 
 import com.atwzh.sell.dateobject.ProductCategory;
+import com.missfresh.antispam.sdk.utils.HttpClientUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -27,16 +27,16 @@ public class ProductInfoDaoTest {
     @Test
     public void TestSave() {
         ProductInfo productInfo = new ProductInfo();
-        productInfo.setProductId("234567");
+        productInfo.setProductId("345678");
         productInfo.setCategoryType(2);
         productInfo.setProductDescription("物美价廉");
         productInfo.setProductIcon("C:/2.jpg");
-        productInfo.setProductName("鱼香肉丝");
+        productInfo.setProductName("鱼香肉丝11");
         productInfo.setProductPrice(new BigDecimal(5.5));
         productInfo.setProductStatus(0);
         productInfo.setProductStock(100);
         ProductInfo save = productInfoDao.save(productInfo);
-        Assert.assertEquals("234567", save.getProductId());
+        Assert.assertEquals("345678", save.getProductId());
     }
 
     @Test
