@@ -21,3 +21,8 @@ wechat:
   notifyUrl: http://127.0.0.1:8080/sell/pay/notify
   openAppId: 123
   openAppSecret: kk
+
+projecturl:
+  weChatMpAuthorize:
+  weChatOpenAuthorize:
+  sell:

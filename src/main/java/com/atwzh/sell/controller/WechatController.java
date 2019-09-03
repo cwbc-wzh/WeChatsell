@@ -1,5 +1,6 @@
 package com.atwzh.sell.controller;
 
+import com.atwzh.sell.config.ProjectUrlConfig;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +28,17 @@ public class WechatController {
     @Autowired
     WxMpService wxMpService;
 
+    @Autowired
+    WxMpService wxOpenService;
+
+    @Autowired
+    ProjectUrlConfig projectUrlConfig;
+
     @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
         //1.配置
         //2.调用方法
-        String url = "http://kmzcaz.natappfree.cc/sell/wechat/usersInfo";
+        String url = projectUrlConfig.getWeChatMpAuthorize() + "/sell/wechat/usersInfo";
         String result = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, returnUrl);
 
         return "redirect:" + result;
@@ -45,6 +52,33 @@ public class WechatController {
 
         try {
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+        } catch (WxErrorException e) {
+            e.getError();
+            throw new SellException(ResultEnum.WX_MP_ERROE);
+        }
+        String openId = wxMpOAuth2AccessToken.getOpenId();
+
+        return "redirect:" + returnUrl + "?openId=" + openId;
+    }
+
+    @GetMapping("/qrAuthorize")
+    public String qrauthorize(@RequestParam("returnUrl") String returnUrl) {
+        //1.配置
+        //2.调用方法
+        String url = projectUrlConfig.getWeChatOpenAuthorize() + "/sell/wechat/qrUsersInfo";
+        String result = wxOpenService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, returnUrl);
+
+        return "redirect:" + result;
+    }
+
+    @GetMapping("/qrUsersInfo")
+    public String qrUsersInfo(@RequestParam("code") String code,
+                            @RequestParam("state") String returnUrl) {
+
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
+
+        try {
+            wxMpOAuth2AccessToken = wxOpenService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
             e.getError();
             throw new SellException(ResultEnum.WX_MP_ERROE);
