@@ -16,6 +16,7 @@ import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.service.OrderService;
 import com.atwzh.sell.service.PayService;
 import com.atwzh.sell.service.ProductInfoService;
+import com.atwzh.sell.service.WebSocket;
 import com.atwzh.sell.utils.KeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,8 @@ public class OrderServiceImpl implements OrderService {
     OrderMasterDao orderMasterDao;
     @Autowired
     PayService payService;
-
+    @Autowired
+    WebSocket webSocket;
     /**
      * 创建订单
      *
@@ -95,6 +97,9 @@ public class OrderServiceImpl implements OrderService {
 
         //4.扣除库存
         productInfoService.decreaseStock(cartDTOList);
+
+        //发送websocket消息
+        webSocket.sendMessage(orderId);
 
         return orderDto;
     }
