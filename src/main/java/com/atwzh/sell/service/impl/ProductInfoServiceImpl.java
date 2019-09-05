@@ -8,6 +8,9 @@ import com.atwzh.sell.enums.ProductStatusEnum;
 import com.atwzh.sell.enums.ResultEnum;
 import com.atwzh.sell.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,17 +24,20 @@ import java.util.List;
  * @description
  */
 @Service
+@CacheConfig(cacheNames = "product")
 public class ProductInfoServiceImpl implements ProductInfoService {
 
     @Autowired
     ProductInfoDao productInfoDao;
 
     @Override
+    @Cacheable(key = "123")
     public ProductInfo getOne(String productInfoId) {
         return productInfoDao.getOne(productInfoId);
     }
 
     @Override
+    @CachePut(key = "123")
     public ProductInfo save(ProductInfo productInfo) {
         return productInfoDao.save(productInfo);
     }
