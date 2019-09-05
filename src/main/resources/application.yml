@@ -16,6 +16,9 @@ server:
   servlet:
     context-path: /sell
 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
 wechat:
   mpAppId: wx339336302995faa2
   mpAppSecret: e0a139c7e3e617763810e6708b7d0d9c

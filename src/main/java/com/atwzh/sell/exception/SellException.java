@@ -1,12 +1,14 @@
 package com.atwzh.sell.exception;
 
 import com.atwzh.sell.enums.ResultEnum;
+import lombok.Getter;
 
 /**
  * @author wangzihang
  * @createTime 2019/6/26
  * @description sellexception
  */
+@Getter
 public class SellException extends RuntimeException {
 
     private Integer code;
