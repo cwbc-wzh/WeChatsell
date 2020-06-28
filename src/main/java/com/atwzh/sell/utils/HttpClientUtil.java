@@ -4,7 +4,7 @@
  * Created by gaoxing on 2018/11/28.
  */
 
-package com.missfresh.antispam.sdk.utils;
+package com.atwzh.sell.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -35,12 +35,12 @@ public class HttpTest {
 
             String xml = starts + sb.toString() + ends;
 
-            try {
-                String s = com.missfresh.antispam.sdk.utils.HttpClientUtil.httpPostXMLDataRequest(url, xml);
-                System.out.println(s);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                String s = com.missfresh.antispam.sdk.utils.HttpClientUtil.httpPostXMLDataRequest(url, xml);
+//                System.out.println(s);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }
