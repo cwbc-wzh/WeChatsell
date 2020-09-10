@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class ProductInfoVO implements Serializable {
-    /** */
+    /** 123 */
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
