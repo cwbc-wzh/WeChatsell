@@ -18,7 +18,7 @@ public class ProductInfoVO implements Serializable {
     /** 132*/
     @JsonProperty("id")
     private String productId;
-
+    /** 123 */
     @JsonProperty("name")
     private String productName;
 
